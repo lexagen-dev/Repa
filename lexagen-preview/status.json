@@ -1,0 +1,43 @@
+{
+  "schema_version": "1",
+  "generated_at": null,
+  "fresh_for_seconds": 180,
+  "checks": [
+    {
+      "id": "public-web",
+      "state": "unknown",
+      "checked_at": null,
+      "fresh_for_seconds": 180,
+      "summary": "Для внешнего чтения ещё не задан публичный адрес.",
+      "source": "HTTPS readback",
+      "scope": "Проверяется выдача страницы, не весь интернет-маршрут каждого посетителя."
+    },
+    {
+      "id": "coordination",
+      "state": "unknown",
+      "checked_at": null,
+      "fresh_for_seconds": 300,
+      "summary": "Внешний API отвечает ожидаемым публичным контрактом.",
+      "source": "Внешний API",
+      "scope": "Доступность API не означает выполнение конкретной приватной задачи."
+    },
+    {
+      "id": "workspace",
+      "state": "unknown",
+      "checked_at": null,
+      "fresh_for_seconds": 360,
+      "summary": "Публичный источник рабочей среды не настроен.",
+      "source": "HTTPS + auth boundary",
+      "scope": "Проверяется публичная поверхность входа, без доступа к пользовательским данным."
+    },
+    {
+      "id": "verification",
+      "state": "unknown",
+      "checked_at": null,
+      "fresh_for_seconds": 180,
+      "summary": "Поля snapshot соответствуют allowlist; приватные детали не обнаружены.",
+      "source": "Локальная проверка публикации",
+      "scope": "Проверяется структура публичного среза, не содержательная приёмка всех проектов."
+    }
+  ]
+}

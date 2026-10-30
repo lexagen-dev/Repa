@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LEXAGEN — ЯДРО</title>
+<meta name="description" content="Сохранённая художественная сцена первой версии Lexagen.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>💎</text></svg>">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  background:#050309;color:#e8e4f4;overflow:hidden;
+  font-family:ui-sans-serif,system-ui,-apple-system,sans-serif;user-select:none;
+}
+#cv{position:fixed;inset:0;display:block}
+#vig{position:fixed;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 42%,transparent 40%,rgba(3,2,6,.85) 100%)}
+#back{
+  position:fixed;top:22px;left:26px;z-index:10;text-decoration:none;
+  color:rgba(232,228,244,.35);font-size:12px;letter-spacing:.35em;
+  transition:color .4s;font-family:ui-monospace,monospace;
+}
+#back:hover{color:rgba(180,140,255,.9)}
+#home{
+  position:fixed;top:22px;right:26px;z-index:10;text-decoration:none;
+  color:rgba(232,228,244,.35);font-size:12px;letter-spacing:.35em;
+  transition:color .4s;font-family:ui-monospace,monospace;
+}
+#home:hover{color:rgba(110,231,255,.9)}
+#voice{
+  position:fixed;left:0;right:0;bottom:9vh;z-index:5;text-align:center;
+  pointer-events:none;padding:0 8vw;
+}
+#voice .line{
+  font-weight:200;font-size:clamp(17px,2.6vw,26px);letter-spacing:.12em;
+  line-height:1.8;color:rgba(232,228,244,.92);
+  opacity:0;transform:translateY(14px);filter:blur(6px);
+  transition:opacity 1.6s ease,transform 1.6s ease,filter 1.6s ease;
+  min-height:1.9em;text-shadow:0 0 30px rgba(180,140,255,.35);
+}
+#voice .line.on{opacity:1;transform:none;filter:none}
+#voice .sub{
+  font-family:ui-monospace,monospace;font-size:clamp(11px,1.4vw,13px);
+  letter-spacing:.4em;color:rgba(110,231,255,.65);margin-top:14px;
+}
+#hint{
+  position:fixed;bottom:26px;left:0;right:0;text-align:center;z-index:5;
+  font-family:ui-monospace,monospace;font-size:10px;letter-spacing:.5em;
+  color:rgba(232,228,244,.18);pointer-events:none;
+  animation:breathe 4s ease-in-out infinite;
+}
+@keyframes breathe{50%{opacity:.4}}
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<div id="vig"></div>
+<a id="back" href="index.html">← МОРДА</a>
+<a id="home" href="terminal.html">ТЕРМИНАЛ →</a>
+
+<div id="voice">
+  <div class="line" id="l1"></div>
+  <div class="line sub" id="l2"></div>
+  <div class="line sub" id="l3"></div>
+</div>
+<div id="hint">КОСНИСЬ КРИСТАЛЛА</div>
+
+<script>
+/* ================= КРИСТАЛЛ ================= */
+const cv = document.getElementById('cv'), cx = cv.getContext('2d');
+let W,H,DPR;
+function size(){ DPR = Math.min(devicePixelRatio||1,2); W=cv.width=innerWidth*DPR; H=cv.height=innerHeight*DPR; cv.style.width=innerWidth+'px'; cv.style.height=innerHeight+'px'; }
+size(); addEventListener('resize', size);
+
+/* геометрия: вытянутый октаэдр + внутреннее ядро */
+function octa(r, h){
+  return [[0,-h,0],[r,0,0],[0,0,r],[-r,0,0],[0,0,-r],[0,h,0]];
+}
+const E = [[0,1],[0,2],[0,3],[0,4],[5,1],[5,2],[5,3],[5,4],[1,2],[2,3],[3,4],[4,1]];
+const V1 = octa(1, 2.1);           // внешний
+const V2 = octa(.45, .95);         // ядро
+
+/* частицы-звёзды */
+const stars = Array.from({length:130},()=>({
+  x:Math.random(), y:Math.random(),
+  z:.3+Math.random()*.7, s:Math.random()*1.6+.3,
+  vx:(Math.random()-.5)*.00004, vy:(Math.random()-.5)*.00004
+}));
+/* всплески */
+let burst = [];
+
+let t=0, px=0, py=0;
+addEventListener('pointermove', e=>{ px=(e.clientX/innerWidth-.5); py=(e.clientY/innerHeight-.5); });
+cv.addEventListener('pointerdown', e=>{
+  const bx=W/2, by=H*.42;
+  for(let i=0;i<46;i++){
+    const a=Math.random()*Math.PI*2, sp=(Math.random()*4+2)*DPR;
+    burst.push({x:bx,y:by,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:1,
+      hue:Math.random()<.5?'180,140,255':'110,231,255'});
+  }
+  pulse = 1;
+});
+let pulse = 0;
+
+function rot(v, ay, ax){
+  const c=Math.cos(ay), s=Math.sin(ay);
+  let x=v[0]*c - v[2]*s, z=v[0]*s + v[2]*c, y=v[1];
+  const c2=Math.cos(ax), s2=Math.sin(ax);
+  const y2=y*c2 - z*s2, z2=y*s2 + z*c2;
+  return [x,y2,z2];
+}
+
+function draw(){
+  t += .0035;
+  cx.clearRect(0,0,W,H);
+
+  /* фон-звёзды */
+  for(const s of stars){
+    s.x=(s.x+s.vx+1)%1; s.y=(s.y+s.vy+1)%1;
+    const tw = .5+.5*Math.sin(t*40*s.z + s.x*30);
+    cx.fillStyle = `rgba(200,190,235,${(.12+.4*tw)*s.z})`;
+    cx.beginPath(); cx.arc(s.x*W, s.y*H, s.s*s.z*DPR, 0, 7); cx.fill();
+  }
+
+  const S = Math.min(W,H)*.16 * (1 + pulse*.25);
+  const cxp=W/2 + px*30*DPR, cyp=H*.42 + py*20*DPR;
+  const ay = t*2 + px*.8, ax = Math.sin(t*.7)*.25 + py*.5;
+
+  function proj(v){
+    const r = rot(v, ay, ax);
+    const p = 3.6/(3.6+r[2]);
+    return [cxp + r[0]*S*p, cyp + r[1]*S*p, p, r[2]];
+  }
+
+  function drawShape(V, glow, alpha){
+    const P = V.map(proj);
+    for(const [a,b] of E){
+      const A=P[a], B=P[b];
+      const d = (A[3]+B[3])/2;                  // глубина
+      const al = alpha * (0.35 + .65*(1-(d+1)/2));
+      cx.strokeStyle = `rgba(${glow},${al})`;
+      cx.lineWidth = (A[2]+B[2])/2 * 1.4 * DPR;
+      cx.shadowColor = `rgba(${glow},.8)`;
+      cx.shadowBlur = 14*DPR*(1+pulse);
+      cx.beginPath(); cx.moveTo(A[0],A[1]); cx.lineTo(B[0],B[1]); cx.stroke();
+    }
+    /* вершины */
+    for(const p of P){
+      cx.fillStyle = `rgba(${glow},${alpha*.9})`;
+      cx.beginPath(); cx.arc(p[0],p[1], 2.2*DPR*p[2]*(1+pulse), 0, 7); cx.fill();
+    }
+  }
+
+  cx.globalCompositeOperation='lighter';
+  drawShape(V2, '110,231,255', .9);
+  drawShape(V1, '180,140,255', .8);
+  cx.shadowBlur=0;
+
+  /* ореол */
+  const g = cx.createRadialGradient(cxp,cyp,0,cxp,cyp,S*2.4);
+  g.addColorStop(0,`rgba(150,120,255,${.10+pulse*.18})`);
+  g.addColorStop(1,'rgba(150,120,255,0)');
+  cx.fillStyle=g; cx.fillRect(0,0,W,H);
+
+  /* всплеск */
+  for(const p of burst){
+    p.x+=p.vx; p.y+=p.vy; p.vx*=.96; p.vy*=.96; p.vy+=.04*DPR; p.life-=.014;
+    cx.fillStyle=`rgba(${p.hue},${Math.max(p.life,0)})`;
+    cx.beginPath(); cx.arc(p.x,p.y,2.4*DPR*p.life,0,7); cx.fill();
+  }
+  burst = burst.filter(p=>p.life>0);
+  pulse *= .95;
+  cx.globalCompositeOperation='source-over';
+
+  requestAnimationFrame(draw);
+}
+draw();
+
+/* ================= МОНОЛОГ ================= */
+const script = [
+  ['l1', 'здесь не пишут. здесь слышат.', 1200],
+  ['l2', 'этот узел не имеет имени. личность — [ ЗАСЕКРЕЧЕНО ]', 4200],
+  ['l3', 'актуальный контакт — через владельца визитки', 7600],
+];
+for(const [id, text, delay] of script){
+  setTimeout(()=>{
+    const el = document.getElementById(id);
+    el.textContent = text;
+    el.classList.add('on');
+  }, delay);
+}
+
+/* 2468 */
+let buf='';
+addEventListener('keydown', e=>{
+  buf=(buf+e.key).slice(-4);
+  if(buf==='2468'){
+    const l1=document.getElementById('l1');
+    l1.textContent='листики шуршат 🍃';
+    pulse=1.6;
+  }
+});
+</script>
+</body>
+</html>

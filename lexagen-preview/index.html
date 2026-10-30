@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07090d">
+  <meta name="description" content="LexTeam — живая инженерная система: от задачи до проверенного результата.">
+  <meta name="lexagen-version" content="lexteam-live-v1">
+  <title>LexTeam · живая инженерная система</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='46' fill='%2307090d'/><text x='50' y='60' text-anchor='middle' font-size='31' fill='%23ffd590' font-family='sans-serif'>LX</text></svg>">
+  <link rel="preload" href="assets/lexteam-diorama.webp" as="image" type="image/webp" fetchpriority="high">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#content">К содержанию</a>
+
+  <header class="site-header" data-reveal>
+    <a class="brand" href="#top" aria-label="LexTeam — наверх">
+      <span class="brand-mark" aria-hidden="true">LX</span>
+      <span>LexTeam</span>
+    </a>
+    <nav aria-label="Основная навигация">
+      <a href="#system">Система</a>
+      <a href="#method">Как работаем</a>
+      <a href="#status">Статусы</a>
+      <a class="nav-terminal" href="terminal.html">Терминал Кими <span aria-hidden="true">↗</span></a>
+    </nav>
+  </header>
+
+  <main id="content">
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <div class="hero-copy" data-reveal>
+        <p class="eyebrow"><span class="live-pulse" aria-hidden="true"></span> Инженерная система в работе</p>
+        <h1 id="hero-title">От замысла<br>до <em>проверенного</em><br>результата.</h1>
+        <p class="hero-lead">LexTeam соединяет человека, ИИ-агентов и собственную инфраструктуру в один производственный контур. Здесь важен не шум процессов, а результат, который можно открыть, проверить и продолжить.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#system">Исследовать систему</a>
+          <a class="button button-quiet" href="terminal.html">Открыть терминал Кими</a>
+        </div>
+      </div>
+
+      <div class="hero-index" aria-label="Ключевые принципы" data-reveal>
+        <span>01 · задача</span>
+        <span>02 · исполнение</span>
+        <span>03 · проверка</span>
+        <span>04 · фиксация</span>
+      </div>
+    </section>
+
+    <section class="observatory" id="system" aria-labelledby="system-title">
+      <div class="section-heading" data-reveal>
+        <div>
+          <p class="eyebrow">Живая сцена · публичный срез</p>
+          <h2 id="system-title">Одна система.<br>Четыре наблюдаемых слоя.</h2>
+        </div>
+        <p>Художественная диорама задаёт атмосферу. Названия, связи и состояния поверх неё строятся программно из отфильтрованного read-only snapshot.</p>
+      </div>
+
+      <div class="scene-shell" data-reveal>
+        <div class="scene-toolbar">
+          <p id="scene-summary" role="status" aria-live="polite">Загружаем свежий публичный срез…</p>
+          <p class="scene-time">Проверено: <time id="snapshot-time" datetime="">—</time></p>
+        </div>
+
+        <div class="scene" aria-describedby="scene-note">
+          <img class="scene-art" src="assets/lexteam-diorama.webp" width="1920" height="804" alt="Художественная инженерная диорама из пяти светящихся островов в тёмном ландшафте">
+          <div class="scene-vignette" aria-hidden="true"></div>
+          <svg class="flow-map" viewBox="0 0 1200 600" preserveAspectRatio="none" aria-hidden="true">
+            <path data-edge="public-web,coordination" d="M175 400 C 320 255, 430 245, 565 310"></path>
+            <path data-edge="coordination,workspace" d="M565 310 C 690 205, 820 180, 1000 255"></path>
+            <path data-edge="coordination,verification" d="M565 310 C 720 405, 815 445, 1010 430"></path>
+          </svg>
+
+          <div class="scene-nodes" role="list" aria-label="Наблюдаемые слои системы">
+            <button class="system-node node-public" type="button" role="listitem" data-check-id="public-web" aria-expanded="false" aria-controls="detail-panel">
+              <span class="status-dot" aria-hidden="true"></span>
+              <span class="node-kicker">Публичный слой</span>
+              <strong>Витрина</strong>
+              <span class="node-state">проверяем</span>
+            </button>
+            <button class="system-node node-coordination" type="button" role="listitem" data-check-id="coordination" aria-expanded="false" aria-controls="detail-panel">
+              <span class="status-dot" aria-hidden="true"></span>
+              <span class="node-kicker">Контур задач</span>
+              <strong>Координация</strong>
+              <span class="node-state">проверяем</span>
+            </button>
+            <button class="system-node node-workspace" type="button" role="listitem" data-check-id="workspace" aria-expanded="false" aria-controls="detail-panel">
+              <span class="status-dot" aria-hidden="true"></span>
+              <span class="node-kicker">Рабочий слой</span>
+              <strong>ИИ-среда</strong>
+              <span class="node-state">проверяем</span>
+            </button>
+            <button class="system-node node-verification" type="button" role="listitem" data-check-id="verification" aria-expanded="false" aria-controls="detail-panel">
+              <span class="status-dot" aria-hidden="true"></span>
+              <span class="node-kicker">Контроль качества</span>
+              <strong>Проверка</strong>
+              <span class="node-state">проверяем</span>
+            </button>
+          </div>
+
+          <aside class="detail-panel" id="detail-panel" tabindex="-1" hidden aria-live="polite">
+            <button class="detail-close" type="button" aria-label="Закрыть карточку">×</button>
+            <p class="detail-kicker" id="detail-source">Источник</p>
+            <h3 id="detail-title">Слой системы</h3>
+            <p class="detail-summary" id="detail-summary"></p>
+            <dl>
+              <div><dt>Состояние</dt><dd id="detail-state">—</dd></div>
+              <div><dt>Проверка</dt><dd id="detail-checked">—</dd></div>
+              <div><dt>Граница</dt><dd id="detail-scope">—</dd></div>
+            </dl>
+          </aside>
+        </div>
+
+        <p class="scene-note" id="scene-note">Статусы не дают доступ к управлению. Публичный срез не содержит адресов узлов, портов, ключей, внутренних путей или сырых логов.</p>
+      </div>
+    </section>
+
+    <section class="method" id="method" aria-labelledby="method-title">
+      <div class="section-heading compact" data-reveal>
+        <div>
+          <p class="eyebrow">Производственный маршрут</p>
+          <h2 id="method-title">Не «агенты ради агентов».<br>Понятный цикл работы.</h2>
+        </div>
+      </div>
+      <ol class="method-grid">
+        <li data-reveal>
+          <span class="step-number">01</span>
+          <h3>Задача</h3>
+          <p>Человек задаёт цель, ограничения и критерий готовности. Решение остаётся за владельцем задачи.</p>
+        </li>
+        <li data-reveal>
+          <span class="step-number">02</span>
+          <h3>Исполнение</h3>
+          <p>Под задачу собирается нужный контур: исследование, код, локальные модели, сервисы и автоматизация.</p>
+        </li>
+        <li data-reveal>
+          <span class="step-number">03</span>
+          <h3>Проверка</h3>
+          <p>Запуск процесса не равен результату. Проверяется выдаваемый артефакт, поведение и границы доказанного.</p>
+        </li>
+        <li data-reveal>
+          <span class="step-number">04</span>
+          <h3>Фиксация</h3>
+          <p>Результат получает версию, доказательства и следующий шаг. История не растворяется между сессиями.</p>
+        </li>
+      </ol>
+    </section>
+
+    <section class="status-section" id="status" aria-labelledby="status-title">
+      <div class="section-heading" data-reveal>
+        <div>
+          <p class="eyebrow">Read-only snapshot</p>
+          <h2 id="status-title">Что видно прямо сейчас.</h2>
+        </div>
+        <p>Без декоративных процентов uptime. Если источник пропадает, зелёный статус истекает и становится устаревшим.</p>
+      </div>
+
+      <div class="status-layout">
+        <div class="status-list" id="status-list" aria-live="polite" data-reveal>
+          <noscript>
+            <p class="noscript">JavaScript отключён. Динамические статусы недоступны; содержание сайта и терминал остаются доступны.</p>
+          </noscript>
+        </div>
+        <aside class="status-key" data-reveal aria-label="Расшифровка статусов">
+          <h3>Как читать сигнал</h3>
+          <dl>
+            <div><dt><span class="key-dot is-ok"></span> Работает</dt><dd>Проверка прошла, источник свежий.</dd></div>
+            <div><dt><span class="key-dot is-degraded"></span> Сбой</dt><dd>Проверка вернула наблюдаемую ошибку.</dd></div>
+            <div><dt><span class="key-dot is-unknown"></span> Неизвестно</dt><dd>Надёжного публичного источника нет.</dd></div>
+            <div><dt><span class="key-dot is-stale"></span> Устарело</dt><dd>Срез старше допустимого окна; старый «зелёный» не наследуется.</dd></div>
+          </dl>
+          <p>Частота обновления: раз в минуту. Окно свежести: три минуты. Это доступность проверяемого пути, а не обещание 24×7.</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="terminal-cta" aria-labelledby="terminal-title" data-reveal>
+      <div>
+        <p class="eyebrow">Отдельный путь</p>
+        <h2 id="terminal-title">Кими оставила терминал.</h2>
+        <p>Интерактивная история сохранена как самостоятельная сцена. Её художественные индикаторы не считаются телеметрией.</p>
+      </div>
+      <a class="button button-light" href="terminal.html">Запустить terminal.html <span aria-hidden="true">↗</span></a>
+    </section>
+  </main>
+
+  <footer>
+    <p>LexTeam · инженерия, агенты, проверяемые результаты</p>
+    <p>Публичная карта намеренно показывает роли и наблюдаемую доступность — не приватную топологию.</p>
+  </footer>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
